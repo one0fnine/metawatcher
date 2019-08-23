@@ -1,17 +1,16 @@
-Import-Module '.\scripts\consuption.ps1'
-Import-Module '.\scripts\send_email.ps1'
-Import-Module '.\scripts\take_screenshot.ps1'
+Import-Module "$PSScriptRoot\scripts\index.psm1"
 
-$username = 'username'
-$password = 'password'
-$sendTo = 'email'
-$screenshotsDirPath = "C:\tmp"
+$screenshotsDirPath="$PSScriptRoot\screenshots\"
+
+prepare_system_env
+prepare_screenshots_directory -path $screenshotsDirPath
+
 $body = @((totalConsuption),(metatraderConsuption))
-$ids = Get-Process -Name terminal | select -expand id
+$ids = Get-Process -Name terminal | Select-Object -expand id
 $emailParams = @{
-  username = $username
-  password = $password
-  to = $sendTo
+  username = [environment]::GetEnvironmentVariable('EMAILUSERNAME', 'User')
+  password = [environment]::GetEnvironmentVariable('EMAILPASSWORD', 'User')
+  to = [environment]::GetEnvironmentVariable('EMAILRECIPIENT', 'User')
   attachmentsDirPath = $screenshotsDirPath
   body = generateHtmlBody -body $body
 }
