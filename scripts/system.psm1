@@ -7,7 +7,7 @@ function prepare_system_env {
 }
 
 function prepare_screenshots_directory {
-    Param([string]$path = "$PSScriptRoot\..\screenshots")
+    Param([string]$path = "$TMP\screenshots")
     
     $path = if ([System.Environment]::screenshotsDirPath) {
       [System.Environment]::screenshotsDirPath
